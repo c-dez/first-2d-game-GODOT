@@ -1,4 +1,5 @@
 extends Area2D
+signal hit 
 
 @export var speed = 400
 var screen_size
@@ -16,7 +17,18 @@ func _process(delta):
 	velocity = Vector2.ZERO
 	_movePlayer(delta)
 	_playerAnimate()
+	
+func _on_body_entered(body):
+	hide()
+	hit.emit()
 
+	$CollisionShape2D.set_deferred("disabled", true)
+	pass 
+
+func start(pos):
+	position = pos 
+	show() 
+	$CollisionShape2D.disabled = false
 
 
 func _movePlayer(delta):
@@ -49,3 +61,5 @@ func _playerAnimate():
 	elif velocity.y != 0:
 		$AnimatedSprite2D.animation = "up"
 		$AnimatedSprite2D.flip_v = velocity.y > 0
+
+
